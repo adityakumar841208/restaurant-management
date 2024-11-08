@@ -5,12 +5,6 @@ document.getElementById("menu-icon").onclick = ()=>{
   navLinks.classList.toggle("active");
 };
 
-function scrollToTable(){
-  document.getElementById('booktable').scrollIntoView({
-    behavior:"smooth"
-  });
-}
-
 
 
 

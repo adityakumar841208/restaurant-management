@@ -15,6 +15,7 @@ html {
 #carouselExampleSlidesOnly .carousel-inner,
 #carouselExampleSlidesOnly .carousel-item {
     height: calc(100vh - 70px);
+    
 }
 
 .carousel-container {
@@ -206,101 +207,6 @@ h5.section-title {
         padding: 10px;
     }
 }
-
-
-/* Book a Table Styling */
-.booktable-conatiner {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: calc(100vh - 70px);
-    background-color: rgb(32, 12, 70);
-    color: white;
-}
-
-#img {
-    width: 50%;
-    height: 100%;
-    object-fit: cover;
-}
-
-#img img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-}
-
-#form {
-    padding: 60px;
-    width: 50%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-#form p {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-}
-
-#form input,
-#form textarea {
-    width: 100%;
-    max-width: 100%;
-    border: none;
-    font-size: larger;
-    padding: 10px;
-    border-radius: 2px;
-    outline: none;
-    margin-bottom: 15px;
-}
-
-#form .book-table {
-    margin-top: 10px;
-    border: none;
-    background-color: #ff7f00;
-    border-radius: 3px;
-    padding: 12px;
-    width: 100%;
-    max-width: 100%;
-    outline: none;
-    font-size: 1rem;
-}
-
-#form .book-table:hover {
-    background-color: #da740f;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .booktable-conatiner {
-        flex-direction: column;
-        height: auto;
-        padding: 20px;
-    }
-
-    #img {
-        width: 100%;
-        height: auto;
-    }
-
-    #form {
-        width: 100%;
-        padding: 20px;
-    }
-
-    #form input,
-    #form textarea {
-        font-size: 1rem;
-    }
-}
-
-
-
 
 
 /* Testimonial Section Styles */

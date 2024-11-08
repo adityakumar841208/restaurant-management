@@ -9,7 +9,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, '../restaurant-website')));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../restaurant-website', 'index.html'));
+    res.sendFile(path.join(__dirname, '../restaurant-website', './index.html'));
 });
 
 app.listen(PORT, () => {
