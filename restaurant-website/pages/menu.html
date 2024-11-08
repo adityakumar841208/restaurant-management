@@ -16,8 +16,6 @@
     <!-- Menu Section -->
     <section class="menu">
         <h1>Our Menu</h1>
-
-        <!-- Filtering and Sorting Options -->
         <div class="filter-sort">
             <select id="filter" class="filter">
                 <option value="all">All</option>
@@ -33,302 +31,16 @@
                 <option value="price-high">Price: High to Low</option>
             </select>
         </div>
-
-        <!-- Menu Items -->
-
         <div class="menu-items" id="menu-items">
-            <div class="menu-card" data-category="snack" data-price="20">
-                <img src="../images/samosa.avif" alt="Samosa">
-                <div class="menu-card-content">
-                    <h3>Samosa</h3>
-                    <p>Classic Indian fried snack filled with spiced potatoes.</p>
-                    <span class="price">₹10 (Half) / ₹20 (Full)</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="20">
-                <img src="../images/vadapav.jpg" alt="Vada Pav">
-                <div class="menu-card-content">
-                    <h3>Vada Pav</h3>
-                    <p>Spicy potato fritter served in a bun.</p>
-                    <span class="price">₹20</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="20">
-                <img src="../images/aloobhujiyapav" alt="Aloo Bhujiya Pav">
-                <div class="menu-card-content">
-                    <h3>Aloo Bhujiya Pav</h3>
-                    <p>Crunchy and spicy potato bhujia served in a soft pav bun for a flavorful bite.</p>
-                    <span class="price">₹20</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="20">
-                <img src="../images/samosapav.jpg" alt="Samosa Pav">
-                <div class="menu-card-content">
-                    <h3>Samosa Pav</h3>
-                    <p>Samosa served in a soft bun, street food favorite.</p>
-                    <span class="price">₹20</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="40">
-                <img src="../images/dahipuri.jpg" alt="Dahi Puri">
-                <div class="menu-card-content">
-                    <h3>Dahi Puri (5 pcs)</h3>
-                    <p>Chaat with crispy shells filled with yogurt and spices.</p>
-                    <span class="price">₹40</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="40">
-                <img src="../images/sukhapuri.jpg" alt="Sukha Puri">
-                <div class="menu-card-content">
-                    <h3>Sukha Puri (5 pcs)</h3>
-                    <p>Crispy puris served with dry masala and spices.</p>
-                    <span class="price">₹40</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="35">
-                <img src="../images/samosachole.jpg" alt="Samosa Chole">
-                <div class="menu-card-content">
-                    <h3>Samosa Chole</h3>
-                    <p>Samosa topped with spicy chickpea curry.</p>
-                    <span class="price">₹35</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="20">
-                <img src="../images/bunmaska.jpg" alt="Bun Butter">
-                <div class="menu-card-content">
-                    <h3>Bun Butter</h3>
-                    <p>Soft bun with butter, classic tea-time snack.</p>
-                    <span class="price">₹20</span>
-                </div>
-            </div>
-
-
-            <div class="menu-card" data-category="snack" data-price="20">
-                <img src="../images/misal_pav.jpg" alt="Misal Pav">
-                <div class="menu-card-content">
-                    <h3>Misal Pav</h3>
-                    <p>Spicy lentil curry served with pav bread.</p>
-                    <span class="price">₹20</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="30">
-                <img src="../images/panipuri.jpg" alt="Fulki">
-                <div class="menu-card-content">
-                    <h3>Fulki (Panipuri)</h3>
-                    <p>Crispy, hollow puris filled with spicy, tangy water, potatoes, and chickpeas, a popular street snack.</p>
-                    <span class="price">₹30</span>
-                </div>
-            </div>            
-
-            <div class="menu-card" data-category="noodles" data-price="50">
-                <img src="../images/plain_maggi.jpg" alt="Plain Maggi">
-                <div class="menu-card-content">
-                    <h3>Plain Maggi</h3>
-                    <p>Simple noodles cooked with Indian spices.</p>
-                    <span class="price">₹50</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="noodles" data-price="50">
-                <img src="../images/veg_maggi.jpg" alt="Vegetable Maggi">
-                <div class="menu-card-content">
-                    <h3>Vegetable Maggi</h3>
-                    <p>Indian-style spicy noodles with vegetables.</p>
-                    <span class="price">₹50</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="noodles" data-price="60">
-                <img src="../images/butter_maggi.jpg" alt="Butter Maggi">
-                <div class="menu-card-content">
-                    <h3>Butter Maggi</h3>
-                    <p>Noodles with butter for a creamy taste.</p>
-                    <span class="price">₹60</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="noodles" data-price="60">
-                <img src="../images/paneer_chowmein.jpg" alt="Paneer Chowmein">
-                <div class="menu-card-content">
-                    <h3>Paneer Chowmein</h3>
-                    <p>Stir-fried noodles tossed with paneer cubes, vegetables, and aromatic spices for a delicious Indo-Chinese flavor.</p>
-                    <span class="price">₹60 (Half) / ₹120 (Full)</span>
-                </div>
-            </div>            
-
-            <div class="menu-card" data-category="noodles" data-price="60">
-                <img src="../images/veg_chowmein.jpg" alt="Vegetable Chowmein">
-                <div class="menu-card-content">
-                    <h3>Vegetable Chowmein</h3>
-                    <p>Stir-fried noodles with mixed vegetables and spices.</p>
-                    <span class="price">₹40 (Half) / ₹70 (Full)</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="30">
-                <img src="../images/cholabhatura" alt="Chola Bhatura">
-                <div class="menu-card-content">
-                    <h3>Chola Bhatura</h3>
-                    <p>Chickpea curry served with fried bread. Extra chola will be charged additionally.</p>
-                    <span class="price">₹30 (Half) / ₹50 (Full)</span>
-                </div>
-            </div>            
-
-            <div class="menu-card" data-category="meal" data-price="40">
-                <img src="../images/plain_dosa.jpg" alt="Plain Dosa">
-                <div class="menu-card-content">
-                    <h3>Plain Dosa</h3>
-                    <p>Crispy South Indian pancake made from rice batter.</p>
-                    <span class="price">₹40</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="meal" data-price="50">
-                <img src="../images/masala_dosa.jpg" alt="Masala Dosa">
-                <div class="menu-card-content">
-                    <h3>Masala Dosa</h3>
-                    <p>Rice pancake stuffed with spiced potatoes.</p>
-                    <span class="price">₹50</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="50">
-                <img src="../images/plain_uttapam.jpg" alt="Plain Uttapam">
-                <div class="menu-card-content">
-                    <h3>Plain Uttapam</h3>
-                    <p>Thick South Indian pancake with a soft texture.</p>
-                    <span class="price">₹50</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="60">
-                <img src="../images/onion_uttapam.jpg" alt="Onion Uttapam">
-                <div class="menu-card-content">
-                    <h3>Onion Uttapam</h3>
-                    <p>Thick pancake topped with onions and spices.</p>
-                    <span class="price">₹60</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="60">
-                <img src="../images/tomato_uttapam.jpg" alt="Tomato Uttapam">
-                <div class="menu-card-content">
-                    <h3>Tomato Uttapam</h3>
-                    <p>Thick pancake topped with tomatoes and spices.</p>
-                    <span class="price">₹60</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="60">
-                <img src="../images/butter_dosa.jpg" alt="Butter Dosa">
-                <div class="menu-card-content">
-                    <h3>Butter Dosa</h3>
-                    <p>Crispy, golden dosa infused with butter for a rich flavor.</p>
-                    <span class="price">₹60</span>
-                </div>
-            </div>            
-
-            <div class="menu-card" data-category="snack" data-price="60">
-                <img src="../images/alooparatha.jpg" alt="Aloo Paratha">
-                <div class="menu-card-content">
-                    <h3>Aloo Paratha</h3>
-                    <p>Stuffed flatbread filled with spiced potatoes.</p>
-                    <span class="price">₹60</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="100">
-                <img src="../images/paneerparatha.jpg" alt="Paneer Paratha">
-                <div class="menu-card-content">
-                    <h3>Paneer Paratha</h3>
-                    <p>Flatbread stuffed with seasoned cottage cheese.</p>
-                    <span class="price">₹100</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="60">
-                <img src="../images/egg_paratha.jpg" alt="Egg Paratha">
-                <div class="menu-card-content">
-                    <h3>Egg Paratha</h3>
-                    <p>Flatbread filled with scrambled egg and spices.</p>
-                    <span class="price">₹60</span>
-                </div>
-            </div>
-
-
-            <!-- form here to change the data  -->
-            <div class="menu-card" data-category="drink" data-price="20">
-                <img src="../images/tea.jpg" alt="Tea">
-                <div class="menu-card-content">
-                    <h3>Tea</h3>
-                    <p>Classic Indian spiced tea, a perfect beverage.</p>
-                    <span class="price">₹10 (Half) / ₹15 (Full)</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="drink" data-price="20">
-                <img src="../images/coffee.jpg" alt="Coffee">
-                <div class="menu-card-content">
-                    <h3>Coffee</h3>
-                    <p>Rich, creamy coffee to start your day.</p>
-                    <span class="price">₹15 (Half) / ₹20 (Full)</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="snack" data-price="20">
-                <img src="../images/black_tea.jpg" alt="Black Tea">
-                <div class="menu-card-content">
-                    <h3>Black Tea</h3>
-                    <p>Simple and refreshing tea without milk.</p>
-                    <span class="price">₹20</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="drink" data-price="25">
-                <img src="../images/black_coffee.jpg" alt="Black Coffee">
-                <div class="menu-card-content">
-                    <h3>Black Coffee</h3>
-                    <p>Strong and bold coffee, served black.</p>
-                    <span class="price">₹25</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="sweet" data-price="20">
-                <img src="../images/gulab_jamun.jpg" alt="Gulab Jamun">
-                <div class="menu-card-content">
-                    <h3>Gulab Jamun</h3>
-                    <p>Sweet fried dumplings soaked in syrup.</p>
-                    <span class="price">₹20</span>
-                </div>
-            </div>
-
-            <div class="menu-card" data-category="sweet" data-price="150">
-                <img src="../images/jalebi.jpg" alt="Jalebi">
-                <div class="menu-card-content">
-                    <h3>Jalebi (1kg)</h3>
-                    <p>Sweet and crispy spirals made with sugar syrup.</p>
-                    <span class="price">₹150</span>
-                </div>
-            </div>
-
-
-
-            <!-- Add more items here if needed -->
-
+            <!-- Items will be dynamically added here -->
         </div>
+        <a href="cart.html" class="view-cart">View Cart</a>
     </section>
+    
+    <!-- Popup message -->
+    <div id="popup" class="popup">Item added to cart!</div>
 
     <div id="footer"></div>
-
-    <script src="../assets/js/menu.js"></script>
 
     <script>
         // Load navbar and footer
@@ -342,8 +54,8 @@
         fetch('../components/footer.html')
             .then(response => response.text())
             .then(data => document.getElementById('footer').innerHTML = data);
-
     </script>
+    <script src="../assets/js/menu.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="../assets/css/cart.css">
+    <link rel="stylesheet" href="../assets/css/navbar.css">
+    <link rel="stylesheet" href="../assets/css/footer.css">
+</head>
+
+<body>
+    <div id="navbar"></div>
+
+    <!-- cart section  -->
+    <section class="cart">
+        <h1>Your Cart</h1>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be rendered here -->
+        </div>
+        <p id="total-price">Total Price: ₹0</p>
+        <button id="proceed-payment" disabled>Proceed to Payment</button>
+    </section>
+
+    <div id="footer"></div>
+
+    <script>
+        // Load navbar and footer
+        fetch('../components/navbar.html').then(response => response.text()).then(data => {
+            document.getElementById('navbar').innerHTML = data;
+            const script = document.createElement('script');
+            script.src = '../assets/js/navbar.js';
+            document.body.appendChild(script);
+        });
+
+        fetch('../components/footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer').innerHTML = data);
+    </script>
+    <script src="../assets/js/cart.js"></script>
+</body>
+
+</html>
