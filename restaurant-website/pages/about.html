@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us Page</title>
+    <link rel="stylesheet" href="../assets/css/about.css">
+    <link rel="stylesheet" href="../assets/css/navbar.css">
+    <link rel="stylesheet" href="../assets/css/footer.css">
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <!-- About Us Section -->
+    <section class="about-us">
+        <div class="about-content">
+            <h1>About Us</h1>
+            <p>Welcome to Vedika Restaurant, where we bring you a delightful culinary experience with a wide range of delicious dishes. Our chefs are dedicated to creating exquisite meals that satisfy your taste buds and leave you craving more.</p>
+            <p>From classic appetizers to mouth-watering main courses, decadent desserts, and refreshing drinks, we offer something for everyone. We take pride in using the freshest ingredients and unique recipes to create a memorable dining experience.</p>
+        </div>
+        <div class="about-image">
+            <img src="https://wallpapers.com/images/hd/food-4k-spdnpz7bhmx4kv2r.jpg" alt="Our Restaurant">
+        </div>
+    </section>
+
+    <div id="footer"></div>
+
+    <script>
+        // Load navbar
+        fetch('../components/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+                const script = document.createElement('script');
+                script.src = '../assets/js/navbar.js';
+                document.body.appendChild(script);
+            });
+
+        // Load footer
+        fetch('../components/footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer').innerHTML = data);
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    background: rgb(173, 163, 144);
+    overflow-x: hidden;
+}
+
+/* Contact Section */
+.contact {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 40px 20px;
+    background-color: rgb(114, 178, 189);
+    text-align: center;
+    color: #333; /* General text color */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact h1 {
+    font-size: 32px;
+    color: #ff8c00; /* Accent color */
+    margin-bottom: 10px;
+}
+
+.contact p {
+    font-size: 16px;
+    color: #555; /* Slightly darker text for contrast */
+    margin-bottom: 30px;
+}
+
+/* Contact Form */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #333; /* Darker color for form labels */
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    background-color: #f9f9f9;
+    color: #333; /* Text color inside inputs */
+}
+
+.form-group textarea{
+    resize: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #888;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border: 2px solid #ff8c00;
+}
+
+.submit-btn {
+    padding: 12px;
+    font-size: 18px;
+    color: #ffffff;
+    background-color: #ff8c00;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #e78207;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .contact h1 {
+        font-size: 28px;
+    }
+
+    .contact p {
+        font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .submit-btn {
+        font-size: 16px;
+        padding: 10px;
+    }
+}

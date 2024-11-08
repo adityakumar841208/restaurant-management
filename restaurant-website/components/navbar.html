@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Navbar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <nav class="nav1">
+      <div class="logo">
+        <span>Vedika Dhaba</span>
+      </div>
+      <div class="search-bar">
+        <input type="text" placeholder="Search dishes...">
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/restaurant-website/index.html">Home</a></li>
+        <li><a href="/restaurant-website/pages/about.html">About</a></li>
+        <li><a href="/restaurant-website/pages/menu.html">Menu</a></li>
+        <li><a href="/restaurant-website/pages/contact.html">Contact</a></li>
+        <li><a class="ct-button" onclick="scrollToTable()">Book a Table</a></li>
+      </ul>
+      <div class="menu-icon" id="menu-icon" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+  </header>
+
+  <script src="../assets/js/navbar.js"></script>
+</body>
+</html>

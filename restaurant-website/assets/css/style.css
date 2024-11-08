@@ -1,0 +1,385 @@
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    background: rgb(173, 163, 144);
+    overflow-x: hidden;
+}
+
+/* Carousel Styling */
+#carouselExampleSlidesOnly .carousel-inner,
+#carouselExampleSlidesOnly .carousel-item {
+    height: calc(100vh - 70px);
+}
+
+.carousel-container {
+    background-image: url("https://th.bing.com/th/id/OIP.paZokRr6HFdXZQoIAKmDjgHaEK?rs=1&pid=ImgDetMain") !important;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    backdrop-filter: brightness(0.1);
+}
+
+#section-width {
+    max-width: 970px;
+}
+
+.slide {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.774);
+}
+
+.text-section {
+    flex: 1;
+    color: white;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 50px;
+    padding-left: 40px;
+}
+
+.text-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.text-section p {
+    font-size: 1.2rem;
+}
+
+.image-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.image-section img {
+    width: 350px;
+    height: 350px;
+    border-radius: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .slide {
+        flex-direction: column;
+    }
+
+    .text-section {
+        padding-right: 0;
+        text-align: center;
+    }
+
+    .text-section h2 {
+        font-size: 2rem;
+    }
+
+    .text-section p {
+        font-size: 1rem;
+    }
+}
+
+/* About section styling  */
+/* About Section */
+.container-xxl {
+    padding: 50px 0;
+    background-color: rgb(173, 163, 144);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: #ff7f00;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+h5.section-title {
+    color: #ff7f00;
+}
+
+.about-icon {
+    font-size: 1.5rem;
+    color: #ff7f00;
+    margin-right: 8px;
+}
+
+.text-primary {
+    color: #ff7f00 !important;
+}
+
+/* Image Layout */
+.row.g-3 img {
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.row.g-3 img:hover {
+    transform: scale(1.05);
+}
+
+.about-img-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.about-img-container img {
+    border-radius: 10px;
+}
+
+/* Counter Section */
+.counter-box {
+    display: flex;
+    align-items: center;
+    border-left: 5px solid #ff7f00;
+    padding-left: 15px;
+    margin-bottom: 20px;
+}
+
+.counter-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ff7f00;
+    margin-right: 10px;
+}
+
+.counter-text p {
+    margin: 0;
+    font-weight: bold;
+    color: #333;
+}
+
+.counter-text h6 {
+    margin: 0;
+    font-weight: normal;
+    color: #666;
+}
+
+/* Button Styling */
+.btn-primary {
+    background-color: #ff7f00;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #da740f;
+    color: #fff;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .container-xxl {
+        padding: 30px 15px;
+    }
+
+    .about-img-container {
+        justify-content: center;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 10px;
+    }
+}
+
+
+/* Book a Table Styling */
+.booktable-conatiner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 70px);
+    background-color: rgb(32, 12, 70);
+    color: white;
+}
+
+#img {
+    width: 50%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#img img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+#form {
+    padding: 60px;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#form p {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+#form input,
+#form textarea {
+    width: 100%;
+    max-width: 100%;
+    border: none;
+    font-size: larger;
+    padding: 10px;
+    border-radius: 2px;
+    outline: none;
+    margin-bottom: 15px;
+}
+
+#form .book-table {
+    margin-top: 10px;
+    border: none;
+    background-color: #ff7f00;
+    border-radius: 3px;
+    padding: 12px;
+    width: 100%;
+    max-width: 100%;
+    outline: none;
+    font-size: 1rem;
+}
+
+#form .book-table:hover {
+    background-color: #da740f;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .booktable-conatiner {
+        flex-direction: column;
+        height: auto;
+        padding: 20px;
+    }
+
+    #img {
+        width: 100%;
+        height: auto;
+    }
+
+    #form {
+        width: 100%;
+        padding: 20px;
+    }
+
+    #form input,
+    #form textarea {
+        font-size: 1rem;
+    }
+}
+
+
+
+
+
+/* Testimonial Section Styles */
+#testimonial {
+    background-color: rgb(173, 163, 144);
+}
+
+.section-title {
+    font-size: 2.5rem;
+    color: #ff7f00;
+    margin-bottom: 30px;
+}
+
+.testimonial-carousel {
+    display: flex;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    gap: 20px;
+    padding-bottom: 20px;
+    scroll-behavior: smooth;
+}
+
+.testimonial-box {
+    flex: 0 0 300px;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    scroll-snap-align: start;
+}
+
+.testimonial-box:hover {
+    background-color: #ff7f00;
+    color: white;
+}
+
+.testimonial-box:hover .quote-icon {
+    color: white;
+}
+
+.quote-icon {
+    font-size: 2rem;
+    color: #ff7f00;
+    margin-bottom: 15px;
+}
+
+.client-info {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.client-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.client-name {
+    font-weight: bold;
+    margin: 0;
+}
+
+.client-profession {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #testimonial .section-title {
+        font-size: 1.8rem;
+    }
+
+    .testimonial-box {
+        padding: 15px;
+    }
+}
