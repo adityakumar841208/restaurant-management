@@ -77,16 +77,20 @@ body {
 
 #proceed-payment {
     margin-top: 20px;
-    background-color: #ff5733;
+    background-color: #fd370b;
     color: white;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
     border-radius: 4px;
 }
+#proceed-payment:hover{
+    background-color: #ff5733;
+}
 
 #proceed-payment:disabled {
     background-color: #ccc;
+    color: black;
     cursor: not-allowed;
 }
 
