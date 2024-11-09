@@ -9,11 +9,13 @@ function renderCart() {
 
     // Iterate over each cart item and create the HTML structure
     cart.forEach(item => {
+        const plateTypeText = item.plateType ? ` (${item.plateType === "half" ? "Half Plate" : "Full Plate"})` : '';
+
         const cartItem = document.createElement("div");
         cartItem.className = "cart-item";
         cartItem.innerHTML = `
             <img src="${item.image}" alt="${item.name}">
-            <h3>${item.name}</h3>
+            <h3>${item.name}${plateTypeText}</h3>
             <div class="quantity-controls">
                 <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
                 <span class="quantity-text">${item.quantity}</span>

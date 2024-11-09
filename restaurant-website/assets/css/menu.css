@@ -1,9 +1,10 @@
 body,
 html {
     background-color: rgb(173, 163, 144);
+    overflow-x: hidden;
 }
 
-.filter-sort{
+.filter-sort {
     margin: 20px;
     display: inline-block;
 }
@@ -31,8 +32,9 @@ html {
 
 .menu-card img {
     width: 100%;
-    height: auto;
+    height: 120px;
     border-radius: 8px;
+    object-position: center;
 }
 
 .menu-card h3 {
@@ -99,4 +101,49 @@ html {
 .popup.show {
     display: block;
     opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .menu-items {
+        margin: 0 20px;
+        justify-content: center;
+    }
+
+    .menu-card {
+        width: 150px;
+    }
+
+    .view-cart {
+        width: 90%;
+    }
+
+    .filter-sort {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-items {
+        margin: 0 10px;
+        gap: 15px;
+    }
+
+    .menu-card {
+        width: 100%;
+    }
+
+    .view-cart {
+        width: 100%;
+    }
+
+    .filter-sort {
+        margin: 10px 0;
+    }
+
+    .popup {
+        width: 80%;
+        font-size: 14px;
+    }
 }

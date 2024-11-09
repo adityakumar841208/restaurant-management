@@ -17,19 +17,19 @@
     <section class="menu">
         <h1>Our Menu</h1>
         <div class="filter-sort">
-            <select id="filter" class="filter">
+            <select id="filter" class="filter" onchange="filterByCategory(this.value)">
                 <option value="all">All</option>
-                <option value="sweet">Sweet</option>
-                <option value="snack">Snack</option>
-                <option value="meal">Meal</option>
-                <option value="noodles">Noodles</option>
-                <option value="drink">Drink</option>
+                <option value="Snacks">Snacks</option>
+                <option value="Meals">Meals</option>
+                <option value="Noodles">Noodles</option>
+                <option value="Paratha">Paratha</option>
+                <option value="Non-Veg">Non-Veg</option>
             </select>
-            <select id="sort" class="sort">
+            <select id="sort" class="sort" onchange="sortItems(this.value)">
                 <option value="default">Sort By</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
-            </select>
+            </select>            
         </div>
         <div class="menu-items" id="menu-items">
             <!-- Items will be dynamically added here -->

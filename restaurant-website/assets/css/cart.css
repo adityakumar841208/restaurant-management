@@ -1,5 +1,6 @@
 body {
     background: rgb(173, 163, 144);
+    overflow-x: hidden;
 }
 
 .cart {
