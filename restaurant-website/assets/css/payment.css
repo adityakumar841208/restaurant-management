@@ -4,7 +4,8 @@
   
   body {
     font-family: Arial, sans-serif;
-    background-color: #f8f8f8;
+    background: rgb(173, 163, 144);
+    overflow-x: hidden;
   }
   
   .container {
@@ -70,7 +71,7 @@
     width: 100%;
     padding: 12px;
     margin-top: 20px;
-    background-color: #28a745;
+    background-color: #e78207;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -79,7 +80,7 @@
   }
   
   button:hover {
-    background-color: #218838;
+    background-color: #f79a28;
   }
   
   /* Responsive styles */

@@ -9,6 +9,7 @@ body,
 html {
     background: rgb(173, 163, 144);
     overflow-x: hidden;
+    font-family: cursive;
 }
 
 /* Carousel Styling */
@@ -19,7 +20,7 @@ html {
 }
 
 .carousel-container {
-    background-image: url("https://th.bing.com/th/id/OIP.paZokRr6HFdXZQoIAKmDjgHaEK?rs=1&pid=ImgDetMain") !important;
+    background-image: url("../../images/herocover.jpg") !important;
     background-size: cover;
     background-repeat: no-repeat;
     height: 100%;

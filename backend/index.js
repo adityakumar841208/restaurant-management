@@ -1,24 +1,35 @@
 const express = require('express');
 const path = require('path');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 const { Order, User } = require('./model');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
 
+// Middleware to parse JSON and URL-encoded form data
 app.use(express.static(path.join(__dirname, '../restaurant-website')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 let orderSummary = {}; // To temporarily store order summary data
 
+// Setup the Nodemailer transporter for sending emails
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,  // Your email address from environment variables
+        pass: process.env.EMAIL_PASS   // Your email password or app-specific password
+    }
+});
+
+// Route for the homepage
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../restaurant-website', './index.html'));
 });
 
 // Route for receiving payment form data and creating an order summary
 app.post('/submit-payment', async (req, res) => {
-
     const { transactionId, name, address, landmark, mobile, message, items } = req.body;
 
     // Basic validation
@@ -41,7 +52,7 @@ app.post('/submit-payment', async (req, res) => {
         totalAmount
     };
 
-    // saving the order summary 
+    // Saving the order summary 
     try {
         await Order.create(orderSummary);
     } catch (error) {
@@ -113,7 +124,35 @@ app.delete('/admin/orders/:transactionId', async (req, res) => {
     }
 });
 
+// Route to handle contact form submissions
+app.post('/send-message', (req, res) => {
+    const { name, email, message } = req.body;
 
+    // Basic validation for the contact form
+    if (!name || !email || !message) {
+        return res.status(400).json({ message: 'Please fill out all required fields.' });
+    }
+
+    const mailOptions = {
+        from: email,
+        to: 'adityasah841208@gmail.com',
+        subject: `New message from ${name}`,
+        text: `You have received a new message from the contact form:\n\n
+        Name: ${name}\n
+        Email: ${email}\n
+        Message: ${message}`
+    };
+
+    // Send the email using the configured SMTP server
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return res.status(500).send('Error sending message: ' + error.toString());
+        }
+        res.status(200).send('Message sent successfully');
+    });
+});
+
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running successfully on port ${PORT}`);
 });
