@@ -17,6 +17,7 @@
     <section class="menu">
         <h1>Our Menu</h1>
         <div class="filter-sort">
+            <input type="text" id="search-bar" class="search-bar" placeholder="Search menu..." oninput="searchMenu()">
             <select id="filter" class="filter" onchange="filterByCategory(this.value)">
                 <option value="all">All</option>
                 <option value="Snacks">Snacks</option>
@@ -29,14 +30,14 @@
                 <option value="default">Sort By</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
-            </select>            
+            </select>
         </div>
         <div class="menu-items" id="menu-items">
             <!-- Items will be dynamically added here -->
         </div>
         <a href="cart.html" class="view-cart">View Cart</a>
     </section>
-    
+
     <!-- Popup message -->
     <div id="popup" class="popup">Item added to cart!</div>
 

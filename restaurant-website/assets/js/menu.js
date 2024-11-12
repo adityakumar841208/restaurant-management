@@ -138,11 +138,69 @@ function sortItems(sortOption) {
         filteredMenuItems.sort((a, b) => (a.fullPlate || a.halfPlate) - (b.fullPlate || b.halfPlate));
     } else if (sortOption === 'price-high') {
         filteredMenuItems.sort((a, b) => (b.fullPlate || b.halfPlate) - (a.fullPlate || a.halfPlate));
-    }else if(sortOption === 'default'){
+    } else if (sortOption === 'default') {
         filteredMenuItems = [...menuItems];
     }
     renderMenu();
 }
+
+
+// This function will filter the menu items based on the search term
+function searchMenu() {
+    const searchTerm = document.getElementById('search-bar').value.toLowerCase();
+
+    if (searchTerm === "") {
+        // If the search bar is empty, show all items
+        filteredMenuItems = [...menuItems];
+    } else {
+        // Filter items based on the search term (case-insensitive)
+        filteredMenuItems = menuItems.filter(item =>
+            item.name.toLowerCase().includes(searchTerm) ||
+            item.description.toLowerCase().includes(searchTerm)
+        );
+    }
+
+    renderMenu();
+}
+
+// Modify the renderMenu function to ensure it uses the filtered items after searching
+function renderMenu() {
+    const menuContainer = document.getElementById("menu-items");
+    menuContainer.innerHTML = ''; // Clear previous menu items
+    filteredMenuItems.forEach(item => {
+        let priceText = '';
+        let plateSelector = '';
+
+        if (item.halfPlate && item.fullPlate) {
+            priceText = `Half: ₹${item.halfPlate} | Full: ₹${item.fullPlate}`;
+            plateSelector = ` 
+                <select id="plate-choice-${item.id}" class="plate-choice">
+                    <option value="half">Half Plate - ₹${item.halfPlate}</option>
+                    <option value="full">Full Plate - ₹${item.fullPlate}</option>
+                </select>`;
+        } else if (item.halfPlate) {
+            priceText = `₹${item.halfPlate}`;
+        } else if (item.fullPlate) {
+            priceText = `₹${item.fullPlate}`;
+        } else {
+            priceText = 'Price not available';
+            plateSelector = `<span>${priceText}</span>`;
+        }
+
+        const menuCard = document.createElement("div");
+        menuCard.className = "menu-card";
+        menuCard.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+            <h3>${item.name}</h3>
+            <p>${item.description}</p>
+            <span class="price">${priceText}</span>
+            ${plateSelector}
+            <button class="add-to-cart-btn" onclick="addToCart(${item.id})">Add to Cart</button>
+        `;
+        menuContainer.appendChild(menuCard);
+    });
+}
+
 
 
 window.onload = () => {

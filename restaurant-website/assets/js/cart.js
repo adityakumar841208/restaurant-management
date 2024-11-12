@@ -50,5 +50,10 @@ function removeItem(id) {
     renderCart();
 }
 
+//function to redirect to payment page
+function pay(){
+    window.location.href = '/pages/payment.html'
+}
+
 // Initialize cart rendering on page load
 window.onload = renderCart;

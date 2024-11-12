@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .login-form,
+        .order-list-container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .login-form input,
+        .login-form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .login-form button {
+            background-color: #5a9;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        .login-form button:hover {
+            background-color: #488;
+        }
+
+        .order {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .order-header {
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 8px;
+        }
+
+        .order-items {
+            margin-top: 10px;
+        }
+
+        .item {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-list-container {
+            display: none;
+            /* Hidden until login */
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Admin Login</h2>
+
+    <!-- Login Form -->
+    <div class="login-form">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="handleLogin()">Login</button>
+        <div id="error-message" class="error-message"></div>
+    </div>
+
+    <!-- Order List (hidden until login) -->
+    <div id="order-list" class="order-list-container">
+        <h2>Order Summary</h2>
+        <div id="orders"></div>
+    </div>
+
+    <script>
+        async function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.querySelector('.login-form').style.display = 'none';
+                    document.getElementById('order-list').style.display = 'block';
+                    fetchOrders(); // Fetch orders upon successful login
+                } else {
+                    errorMessage.textContent = result.message || 'Login failed. Please try again.';
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                errorMessage.textContent = 'An error occurred. Please try again.';
+            }
+        }
+
+        // Fetch orders from the backend after login
+        async function fetchOrders() {
+            try {
+                const response = await fetch('/admin/orders');
+                const orders = await response.json();
+
+                const orderList = document.getElementById('orders');
+                orderList.innerHTML = ''; // Clear existing orders
+
+                // Render each order
+                orders.forEach(order => {
+                    const orderDiv = document.createElement('div');
+                    orderDiv.classList.add('order');
+                    orderDiv.innerHTML = `
+                        <div class="order-header">Transaction ID: ${order.transactionId}</div>
+                        <div>Name: ${order.name}</div>
+                        <div>Address: ${order.address}</div>
+                        <div>Mobile: ${order.mobile}</div>
+                        <div>Total Amount: ₹${order.totalAmount}</div>
+                        <div>Order Date: ${new Date(order.timestamp).toLocaleString()}</div>
+
+                        <div class="order-items">
+                            <h4>Items:</h4>
+                            ${order.items.map(item => `
+                                <div class="item">
+                                    <div><strong>${item.name}</strong> - ${item.quantity} x ₹${item.price}</div>
+                                    <div>${item.description}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Delete button -->
+                        <button onclick="deleteOrder('${order.transactionId}')">Delete Order</button>
+                    `;
+                    orderList.appendChild(orderDiv);
+                });
+            } catch (error) {
+                console.error("Error fetching orders:", error);
+                alert("Failed to load orders. Please try again.");
+            }
+        }
+
+        // Delete order function
+        async function deleteOrder(transactionId) {
+            try {
+                const response = await fetch(`/admin/orders/${transactionId}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message);  // Show success message
+                    fetchOrders();  // Refresh the order list
+                } else {
+                    alert(result.message || 'Failed to delete order');
+                }
+            } catch (error) {
+                console.error("Error deleting order:", error);
+                alert("An error occurred. Please try again.");
+            }
+        }
+    </script>
+</body>
+
+</html>
