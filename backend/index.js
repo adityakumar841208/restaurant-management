@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const cors = require('cors');
 require('dotenv').config();
 const { Order, User } = require('./model');
 
@@ -10,6 +11,7 @@ const app = express();
 // Middleware to parse JSON and URL-encoded form data
 app.use(express.static(path.join(__dirname, '/restaurant-website')));
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 let orderSummary = {}; // To temporarily store order summary data
