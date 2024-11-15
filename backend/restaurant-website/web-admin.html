@@ -122,6 +122,7 @@
                     errorMessage.textContent = result.message || 'Login failed. Please try again.';
                 }
             } catch (error) {
+                console.log(response)
                 console.error('Error during login:', error);
                 errorMessage.textContent = 'An error occurred. Please try again.';
             }
