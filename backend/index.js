@@ -85,26 +85,26 @@ app.get('/admin/orders', async (req, res) => {
 
 // Login route
 app.post('/login', async (req, res) => {
-    res.send({"hello":"aditya"})
-    // const { username, password } = req.body;
+    res.send({ "hello": "aditya" })
+    const { username, password } = req.body;
 
-    // try {
-    //     // Find user by username
-    //     const user = await User.findOne({ username });
-    //     if (!user) {
-    //         return res.status(401).json({ message: 'Invalid username or password.' });
-    //     }
+    try {
+        // Find user by username
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid username or password.' });
+        }
 
-    //     if (user.password !== password) {
-    //         return res.status(401).json({ message: 'Invalid username or password.' });
-    //     }
+        if (user.password !== password) {
+            return res.status(401).json({ message: 'Invalid username or password.' });
+        }
 
-    //     // Respond with success message
-    //     res.json({ message: 'Login successful!' });
-    // } catch (error) {
-    //     console.error("Error during login:", error);
-    //     res.status(500).json({ message: 'An error occurred during login.' });
-    // }
+        // Respond with success message
+        res.json({ message: 'Login successful!' });
+    } catch (error) {
+        console.error("Error during login:", error);
+        res.status(500).json({ message: 'An error occurred during login.' });
+    }
 });
 
 // Route to delete an order
