@@ -112,8 +112,8 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password })
                 });
-                const result = await response;
-                console.log(response)
+                const result = await response.json();
+                console.log(result)
                 if (response.ok) {
                     document.querySelector('.login-form').style.display = 'none';
                     document.getElementById('order-list').style.display = 'block';

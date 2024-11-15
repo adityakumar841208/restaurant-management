@@ -85,7 +85,6 @@ app.get('/admin/orders', async (req, res) => {
 
 // Login route
 app.post('/login', async (req, res) => {
-    res.send({ "hello": "aditya" })
     const { username, password } = req.body;
 
     try {
@@ -100,7 +99,7 @@ app.post('/login', async (req, res) => {
         }
 
         // Respond with success message
-        res.json({ message: 'Login successful!' });
+        await res.json({ message: 'Login successful!' });
     } catch (error) {
         console.error("Error during login:", error);
         res.status(500).json({ message: 'An error occurred during login.' });
