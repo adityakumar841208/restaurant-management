@@ -1,12 +1,20 @@
 const express = require('express');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const webPush = require('web-push');
 const cors = require('cors');
 require('dotenv').config();
-const { Order, User } = require('./model');
+const { Order, User, Subscription } = require('./model');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
+
+// VAPID Keys
+webPush.setVapidDetails(
+    'mailto:admin@example.com', // Replace with your email
+    process.env.VAPID_PUBLIC_KEY, // Replace with your public VAPID key
+    process.env.VAPID_PRIVATE_KEY // Replace with your private VAPID key
+);
 
 // Middleware to parse JSON and URL-encoded form data
 app.use(express.static(path.join(__dirname, '../restaurant-website')));
@@ -43,7 +51,7 @@ app.post('/submit-payment', async (req, res) => {
     let totalAmount = items.reduce((total, item) => total + item.price * item.quantity, 0);
 
     // Store the order summary
-    orderSummary = {
+    const orderSummary = {
         transactionId,
         name,
         address,
@@ -61,9 +69,51 @@ app.post('/submit-payment', async (req, res) => {
         console.log("Error while saving the data", error);
     }
 
+    // Find all subscriptions from the DB
+    const subscriptions = await Subscription.find();
+
+    // Notification content
+    const notificationPayload = JSON.stringify({
+        title: 'New Order Received!',
+        body: `Order from ${name}. Total: ₹${totalAmount}`,
+        data: { transactionId, name, address, mobile, totalAmount },
+    });
+
+    // Send notifications to all valid subscribers
+    for (const subscription of subscriptions) {
+        try {
+            // Send notification
+            await webPush.sendNotification(subscription, notificationPayload);
+        } catch (error) {
+            if (error.statusCode === 410) {
+                // If the subscription is revoked, remove it from the database
+                console.log(`Subscription revoked for ${subscription.endpoint}. Removing from DB.`);
+                await Subscription.deleteOne({ endpoint: subscription.endpoint });
+            } else {
+                console.error('Error sending notification:', error);
+            }
+        }
+    }
+
+    // Send email notification to admin
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: process.env.OWNER_EMAIL,
+        subject: `New Order Received`,
+        text: `You have received a new order:\n\n${JSON.stringify(orderSummary, null, 2)}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return res.status(500).send('Error sending message: ' + error.toString());
+        }
+        console.log('Email sent: ' + info.response);
+    });
+
     // Respond with a success message
     res.json({ message: 'Payment details submitted successfully!', orderSummary });
 });
+
 
 // Route to get the order summary
 app.get('/order-summary', (req, res) => {
@@ -153,6 +203,30 @@ app.post('/send-message', (req, res) => {
         res.status(200).send('Message sent successfully');
     });
 });
+
+// route to handle the notification subscriber data save in the db 
+app.post('/subscribe', async (req, res) => {
+    try {
+        const subscription = req.body;
+
+        // Check if this subscription already exists (check by endpoint or another unique identifier)
+        const existingSubscription = await Subscription.findOne({ 'endpoint': subscription.endpoint });
+
+        if (existingSubscription) {
+            return res.status(200).json({ message: 'Subscription already exists. No need to save.' });
+        }
+
+        // Save subscription if it doesn't exist
+        const newSubscription = new Subscription(subscription);
+        await newSubscription.save();
+        res.status(201).json({ message: 'Subscription saved successfully!' });
+    } catch (error) {
+        console.error('Error saving subscription:', error);
+        res.status(500).json({ message: 'Failed to save subscription.' });
+    }
+});
+
+
 
 // Start the server
 app.listen(PORT, () => {

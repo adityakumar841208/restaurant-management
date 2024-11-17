@@ -39,6 +39,31 @@ const userSchema = new mongoose.Schema({
 // No password hashing middleware, so we remove that part
 // No need for comparePassword method either
 
+
+// subscription schema 
+const subscriptionSchema = new mongoose.Schema({
+    endpoint: {
+        type: String,
+        required: true,
+    },
+    keys: {
+        p256dh: {
+            type: String,
+            required: true,
+        },
+        auth: {
+            type: String,
+            required: true,
+        },
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+});
+
+const Subscription = mongoose.model('Subscription', subscriptionSchema);
+
 const User = mongoose.model('User', userSchema);
 
-module.exports = { Order, User };
+module.exports = { Order, User, Subscription };

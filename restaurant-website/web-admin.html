@@ -16,6 +16,7 @@
 
         h2 {
             color: #333;
+
             margin-bottom: 10px;
         }
 
@@ -117,13 +118,29 @@
                 if (response.ok) {
                     document.querySelector('.login-form').style.display = 'none';
                     document.getElementById('order-list').style.display = 'block';
+
                     fetchOrders(); // Fetch orders upon successful login
+                    notifyAdmin();
+                    await subscribeForNotifications();
                 } else {
                     errorMessage.textContent = result.message || 'Login failed. Please try again.';
                 }
             } catch (error) {
                 console.error('Error during login:', error);
                 errorMessage.textContent = 'An error occurred. Please try again.';
+            }
+        }
+
+        // Request notification permissions and show a success notification
+        function notifyAdmin() {
+            if (Notification.permission === 'granted') {
+                new Notification('Login successful', { body: 'Welcome, Admin!' });
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        new Notification('Login successful', { body: 'Welcome, Admin!' });
+                    }
+                });
             }
         }
 
@@ -137,7 +154,7 @@
                 orderList.innerHTML = ''; // Clear existing orders
 
                 // Render each order
-                orders.forEach(order => {
+                orders.reverse().forEach(order => {
                     const orderDiv = document.createElement('div');
                     orderDiv.classList.add('order');
                     orderDiv.innerHTML = `
@@ -189,6 +206,58 @@
                 alert("An error occurred. Please try again.");
             }
         }
+
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+            navigator.serviceWorker
+                .register('/sw.js') // Ensure this matches the location of your service worker file
+                .then((reg) => {
+                    console.log('Service Worker registered successfully', reg);
+                })
+                .catch((err) => console.error('Service Worker registration failed:', err));
+        } else {
+            console.warn('Push notifications are not supported in this browser.');
+        }
+
+        // Subscribe admin for push notifications
+        async function subscribeForNotifications() {
+            try {
+                // Ensure the service worker is ready
+                const registration = await navigator.serviceWorker.ready;
+
+                // Subscribe to push notifications
+                const subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true, // Ensure notifications are visible
+                    applicationServerKey: urlBase64ToUint8Array(
+                        'BCI8kp9uApmkf7mDWn4pDUA3YkxhvtjUNAo2uJb9AXi92O3jJ7WbHTaD9yO1pKMf-HujRJhyJQ0-z_glcdyPI_o' // Replace with your VAPID public key
+                    ),
+                });
+                console.log('Admin subscribed for push notifications:', subscription);
+
+                // Send the subscription object to the backend
+                const response = await fetch('/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(subscription),
+                });
+
+                if (response.ok) {
+                    console.log('Admin successfully subscribed for notifications.');
+                } else {
+                    console.error('Failed to subscribe admin for notifications:', await response.text());
+                }
+            } catch (error) {
+                console.error('Error subscribing for notifications:', error);
+            }
+        }
+
+        // Helper function to convert VAPID public key to Uint8Array
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+            const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            return new Uint8Array([...rawData].map((char) => char.charCodeAt(0)));
+        }
+
     </script>
 </body>
 
