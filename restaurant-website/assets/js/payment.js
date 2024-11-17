@@ -54,7 +54,7 @@ document.getElementById('paymentForm').addEventListener('submit', async function
           // Clear the form and order data
           this.reset();
           localStorage.removeItem('cart'); // Clear cart after submission
-          window.location.reload();
+        //   window.location.reload();
       } else {
           alert(result.message || 'Failed to submit payment details.');
       }
