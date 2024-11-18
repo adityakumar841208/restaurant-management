@@ -21,8 +21,7 @@ self.addEventListener('notificationclick', (event) => {
     const notificationData = event.notification.data; // Access the data set in showNotification
     console.log(notificationData)
     event.waitUntil(
-        // clients.openWindow(`http://localhost:5000/admin/${notificationData.order}`) // Use the ID from notification data
-        clients.openWindow(`https://vedika-restaurant.onrender.com/admin/${notificationData.order}`) // Use the ID from notification data
+        clients.openWindow(`https://vedika-restaurant.onrender.com/${notificationData.order}`) // Use the ID from notification data
     );
     // if (notificationData && notificationData.id) {
     //     // Perform an action or navigate to a URL
