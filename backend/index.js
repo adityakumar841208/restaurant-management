@@ -5,9 +5,12 @@ const webPush = require('web-push');
 const cors = require('cors');
 require('dotenv').config();
 const { Order, User, Subscription } = require('./model');
+const razorPay = require('./razorpay');
 
 const PORT = process.env.PORT || 5000;
 const app = express();
+
+app.use('/', razorPay)
 
 // VAPID Keys
 webPush.setVapidDetails(
@@ -235,6 +238,7 @@ app.get('/admin/:id', async (req, res) => {
         if (!result) {
             return res.status(404).send('<h1 style="color: red; text-align: center;">Order not found</h1>');
         }
+        console.log(result)
 
         // Construct HTML response with inline CSS
         const html = `

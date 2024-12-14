@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vedika Restaurant Payment Page</title>
+    <link rel="stylesheet" href="../assets/css/payment.css">
+    <link rel="stylesheet" href="../assets/css/navbar.css">
+    <link rel="stylesheet" href="../assets/css/footer.css">
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <div class="container">
+        <h1>Checkout</h1>
+
+        <div id="orderDetails" style="margin-top: 20px; border: 1px solid #ddd; padding: 20px; border-radius: 5px;">
+            <h2>Order Summary</h2>
+            <p id="orderSummary">Loading your order details...</p>
+        </div>
+
+        <div class="payment-section" style="margin-top: 20px;">
+            <h2 id="payNow">Pay Now</h2>
+            <button id="payButton" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Proceed to Pay</button>
+        </div>
+
+        <!-- Receipt Section -->
+        <div id="receipt" style="display: none; margin-top: 20px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
+            <h2>Payment Receipt</h2>
+            <div id="receiptDetails"></div>
+            <button id="downloadReceipt" style="margin-top: 15px; padding: 10px 15px; font-size: 14px; background-color: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 5px;">
+                Download Receipt
+            </button>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script>
+        fetch('../components/navbar.html').then(response => response.text()).then(data => {
+            document.getElementById('navbar').innerHTML = data;
+            const script = document.createElement('script');
+            script.src = '../assets/js/navbar.js';
+            document.body.appendChild(script);
+        });
+
+        fetch('../components/footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer').innerHTML = data);
+    </script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="../assets/js/payment2.js"></script>
+</body>
+</html>

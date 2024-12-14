@@ -9,7 +9,7 @@ body,
 html {
     background: rgb(173, 163, 144);
     overflow-x: hidden;
-    font-family: cursive;
+    font-family: Verdana, Geneva, Tahoma, sans-serif !important;
 }
 
 /* Carousel Styling */
