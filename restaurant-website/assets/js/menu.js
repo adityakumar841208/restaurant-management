@@ -28,7 +28,7 @@ const menuItems = [
     { id: 27, name: "Onion Pakoda (8 Pieces)", category: "Snacks", halfPlate: null, fullPlate: 100, description: "Deep-fried onion fritters.", image: "../images/onionpakoda.jpg" },
     { id: 28, name: "Paneer Pakoda (6 Pieces)", category: "Snacks", halfPlate: null, fullPlate: 120, description: "Deep-fried paneer fritters.", image: "../images/paneerpakoda.jpg" },
     { id: 29, name: "Jalebi (1kg)", category: "Desserts", halfPlate: null, fullPlate: 200, description: "Sweet, crispy fried spirals.", image: "../images/jalebi.jpg" },
-    { id: 30, name: "Cold drinks", category: "Beverages", halfPlate: null, fullPlate: null, description: "Chilled cold drink (various flavors).", image: "../images/cold_drink.jpg" },
+    // { id: 30, name: "Cold drinks", category: "Beverages", halfPlate: null, fullPlate: 'M.R.P.', description: "Chilled cold drink (various flavors).", image: "../images/colddrink.webp" },
     { id: 31, name: "Tea", category: "Beverages", halfPlate: 10, fullPlate: 15, description: "Hot Indian tea with milk.", image: "../images/chai.jpg" },
     { id: 32, name: "Coffee", category: "Beverages", halfPlate: 15, fullPlate: 20, description: "Hot brewed coffee.", image: "../images/coffee.jpg" },
     { id: 33, name: "Cold Coffee", category: "Beverages", halfPlate: null, fullPlate: 100, description: "Chilled coffee with milk and sugar.", image: "../images/coldcoffee.jpg" },
@@ -110,19 +110,19 @@ function addToCart(id) {
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
-    showPopup("Item added to cart!");
+    showPopup("Item added to ");
 }
 
 // Show popup message function
 function showPopup(message) {
     const popup = document.getElementById("popup");
-    popup.textContent = message;
+    popup.innerHTML = message + `<a href="../pages/cart.html" style="color:rgb(242 33 9); text-decoration:none">Cart!</a>`;
     popup.classList.add("show");
 
     // Hide the popup after 2 seconds
     setTimeout(() => {
         popup.classList.remove("show");
-    }, 2000);
+    }, 3000);
 }
 
 // Filter items by category
