@@ -12,7 +12,7 @@ const router = express.Router();
 // Middleware 
 router.use(express.json());
 
-const WEB_BASE_URL = process.env.WEB_BASE_URL || 'http://localhost:5000';
+const WEB_BASE_URL = process.env.WEB_BASE_URL || 'https://vedika-restaurant.onrender.com';
 
 // PhonePe Configuration
 const PHONEPE_BASE_URL = process.env.BASE_URL;
