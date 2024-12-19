@@ -2,7 +2,7 @@ const express = require('express')
 const webPush = require('web-push');
 require('dotenv').config()
 const nodemailer = require('nodemailer');
-const {RealOrder,Subscription} = require('./model')
+const { RealOrder, Subscription } = require('./model')
 
 
 // VAPID Keys
@@ -24,9 +24,10 @@ const transporter = nodemailer.createTransport({
 
 const sendNotification = async function sendNotification(orderId) {
     // Find all subscriptions from the DB
+    console.log('orderId in notification', orderId)
     const subscriptions = await Subscription.find();
-    const order = RealOrder.findOne({orderId})
-    console.log('notification order is here: ',order)
+    const order = await RealOrder.findOne({ orderId })
+    console.log('notification order is here: ', order)
 
     // Notification content
     const notificationPayload = JSON.stringify({
