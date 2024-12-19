@@ -149,6 +149,7 @@
             try {
                 const response = await fetch('/admin/orders');
                 const orders = await response.json();
+                console.log(orders);
 
                 const orderList = document.getElementById('orders');
                 orderList.innerHTML = ''; // Clear existing orders
@@ -158,26 +159,25 @@
                     const orderDiv = document.createElement('div');
                     orderDiv.classList.add('order');
                     orderDiv.innerHTML = `
-                        <div class="order-header">Transaction ID: ${order.transactionId}</div>
-                        <div>Name: ${order.name}</div>
-                        <div>Address: ${order.address}</div>
-                        <div>Mobile: ${order.mobile}</div>
-                        <div>Total Amount: ₹${order.totalAmount}</div>
-                        <div>Order Date: ${new Date(order.timestamp).toLocaleString()}</div>
+                <div class="order-header">Order ID: ${order.orderId}</div>
+                <div>Mobile: ${order.mobile}</div>
+                <div>Total Amount: ₹${order.amount}</div>
+                <div>Total Amount: ₹${order.address}</div>
+                <div>Time: ${new Date(order.timestamp).toLocaleString()}</div>
 
-                        <div class="order-items">
-                            <h4>Items:</h4>
-                            ${order.items.map(item => `
-                                <div class="item">
-                                    <div><strong>${item.name}</strong> - ${item.quantity} x ₹${item.price}</div>
-                                    <div>${item.description}</div>
-                                </div>
-                            `).join('')}
+                <div class="order-items">
+                    <h4>Order Summary:</h4>
+                    ${order.orderSummary.map(item => `
+                        <div class="item">
+                            <strong>${item.name}</strong> - ${item.quantity} x ₹${item.price}
+                            <div>${item.description}</div>
                         </div>
+                    `).join('')}
+                </div>
 
-                        <!-- Delete button -->
-                        <button onclick="deleteOrder('${order.transactionId}')">Delete Order</button>
-                    `;
+                <!-- Delete button -->
+                <button onclick="deleteOrder('${order.orderId}')">Delete Order</button>
+            `;
                     orderList.appendChild(orderDiv);
                 });
             } catch (error) {
@@ -185,6 +185,7 @@
                 alert("Failed to load orders. Please try again.");
             }
         }
+
 
         // Delete order function
         async function deleteOrder(transactionId) {

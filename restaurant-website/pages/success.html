@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vedika Restaurant - Order Payment Status</title>
+    <link rel="stylesheet" href="../assets/css/about.css">
+    <link rel="stylesheet" href="../assets/css/navbar.css">
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        /* Success and Error Messages */
+        .status-message {
+            padding: 15px;
+            font-size: 18px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .success-message {
+            background-color: lightgreen;
+            color: #2d6a4f;
+        }
+
+        .error-message {
+            background-color: lightcoral;
+            color: #9b2226;
+        }
+
+        /* Order Details */
+        .order-details {
+            text-align: left;
+            font-size: 16px;
+            margin-top: 30px;
+        }
+
+        .order-details h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .order-summary {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .order-summary li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-summary li:last-child {
+            border-bottom: none;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+            padding-top: 15px;
+        }
+
+        /* Download button */
+        .download-btn {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .download-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar"></div>
+
+    <div class="container">
+        <h1>Order Payment Status</h1>
+
+        <!-- Success message (initially hidden) -->
+        <div id="paymentStatusMessage" class="status-message success-message" style="display: none;">
+            Payment Successful! Your order is being processed. For any Query - 9664982306
+        </div>
+
+        <!-- Error message (initially hidden) -->
+        <div id="errorMessage" class="status-message error-message" style="display: none;">
+            There was an issue with your payment. Please try again.
+        </div>
+
+        <!-- Order Details (initially hidden) -->
+        <div id="orderDetails" class="order-details" style="display: none;">
+            <h3>Order Summary</h3>
+            <ul id="orderSummary" class="order-summary"></ul>
+            <div class="total">
+                <strong>Total Amount:</strong> ₹<span id="totalAmount"></span>
+            </div>
+            <div>
+                <strong>Order ID:</strong> <span id="orderId"></span><br>
+                <strong>Mobile:</strong> <span id="mobile"></span><br>
+                <strong>Address:</strong> <span id="address"></span><br>
+                <strong>Timestamp:</strong> <span id="timestamp"></span>
+            </div>
+            <button id="downloadReceipt" class="download-btn" style="display: none;">Download Receipt</button>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script>
+        // Load navbar
+        fetch('../components/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+                const script = document.createElement('script');
+                script.src = '../assets/js/navbar.js';
+                document.body.appendChild(script);
+            });
+
+        // Load footer
+        fetch('../components/footer.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('footer').innerHTML = data);
+
+        // Get the orderId and status from the URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId');  // Get the orderId from the URL
+
+        // Verify payment status and fetch order details
+        fetch('/verify-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ orderId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success' && data.orderDetails) {
+                const order = data.orderDetails;
+                const orderSummary = document.getElementById('orderSummary');
+                let summaryHtml = '';
+
+                // Iterate over the order items and generate the HTML
+                order.orderSummary.forEach(item => {
+                    summaryHtml += `<li>${item.name} - ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}</li>`;
+                });
+
+                // Display the total amount
+                document.getElementById('totalAmount').innerText = order.amount;
+
+                // Display Order ID, Mobile, Timestamp
+                document.getElementById('orderId').innerText = order.orderId;
+                document.getElementById('mobile').innerText = order.mobile;
+                document.getElementById('address').innerText = order.address;
+                document.getElementById('timestamp').innerText = new Date(order.timestamp).toLocaleString();
+
+                // Add order details to the list
+                orderSummary.innerHTML = summaryHtml;
+
+                // Show order details section
+                document.getElementById('orderDetails').style.display = 'block';
+
+                // Show success message
+                document.getElementById('paymentStatusMessage').style.display = 'block';
+
+                // Show the Download Receipt button
+                document.getElementById('downloadReceipt').style.display = 'block';
+
+                // Remove the local storage cart
+                localStorage.removeItem('cart');
+            } else {
+                // Show error message if payment verification fails
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching order details:', error);
+            document.getElementById('errorMessage').style.display = 'block'; // Show error if fetching fails
+        });
+
+        // Function to generate the receipt as a .txt file
+        document.getElementById('downloadReceipt').addEventListener('click', function () {
+            const orderDetails = document.getElementById('orderDetails');
+            const orderSummary = document.getElementById('orderSummary');
+            const orderId = document.getElementById('orderId').innerText;
+            const mobile = document.getElementById('mobile').innerText;
+            const timestamp = document.getElementById('timestamp').innerText;
+            const totalAmount = document.getElementById('totalAmount').innerText;
+
+            let receiptText = `Receipt for Order ID: ${orderId}\n`;
+            receiptText += `Mobile: ${mobile}\n`;
+            receiptText += `Timestamp: ${timestamp}\n\n`;
+            receiptText += `Order Summary:\n`;
+
+            // Add order items to the receipt
+            Array.from(orderSummary.children).forEach(item => {
+                receiptText += `${item.textContent}\n`;
+            });
+
+            receiptText += `\nTotal Amount: ₹${totalAmount}\n`;
+
+            // Create a Blob and generate a download link
+            const blob = new Blob([receiptText], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Order_Receipt_${orderId}.txt`;
+
+            // Trigger download
+            link.click();
+        });
+    </script>
+</body>
+
+</html>
