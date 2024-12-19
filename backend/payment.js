@@ -79,7 +79,7 @@ router.post('/create-payment', async (req, res) => {
         },
       }
     );
-    console.log(response.message)
+    console.log(response)
     if (response.data.success) {
       res.json({
         status: "success",
