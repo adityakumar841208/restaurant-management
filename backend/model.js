@@ -66,7 +66,7 @@ const realOrderSchema = new mongoose.Schema({
     orderId: { type: String, required: true, unique: true },
     mobile: { type: String, required: true },
     amount: { type: Number, required: true },
-    address: { type: String, required: true},
+    address:{ type: String, required: true},
     orderSummary: { type: Array, required: true }, // Array to hold items
     paymentStatus: { type: String, default: 'Pending' },
     timestamp: { type: Date, default: Date.now },

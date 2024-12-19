@@ -98,7 +98,6 @@ router.post('/create-payment', async (req, res) => {
 
 // Payment Callback Endpoint
 router.post('/payment-callback', async (req, res) => {
-  console.log("Received Callback:", req.body);
 
   // Decode and parse the response
   const { response } = req.body;
@@ -106,6 +105,8 @@ router.post('/payment-callback', async (req, res) => {
   try {
     const decodedResponse = Buffer.from(response, 'base64').toString('utf-8');
     parsedResponse = JSON.parse(decodedResponse);
+
+
   } catch (error) {
     console.error("Error decoding or parsing response:", error.message);
     return res.status(400).json({ status: "error", message: "Invalid response format." });
@@ -161,7 +162,7 @@ router.post('/payment-callback', async (req, res) => {
 // Manual Payment Verification Endpoint (Triggered by success.html)
 router.post('/verify-payment', async (req, res) => {
   const { orderId } = req.body; // The orderId sent from success.html
-  console.log('Received orderId for verification:', orderId);
+  // console.log('Received orderId for verification:', orderId);
 
   if (!orderId) {
     return res.status(400).json({ status: "error", message: "Missing required field: orderId." });
@@ -193,9 +194,9 @@ router.post('/verify-payment', async (req, res) => {
 router.post('/pages/success.html',async (req, res) => {
   const status = req.body.code
   const transactionId = req.body.transactionId
-  console.log(transactionId)
+  // console.log(transactionId)
   const order = await RealOrder.findOne({orderId: transactionId})
-  console.log(order)
+  // console.log(order)
   if(status === 'PAYMENT_SUCCESS'){
     order.paymentStatus = 'Completed'
     await order.save()
@@ -205,7 +206,7 @@ router.post('/pages/success.html',async (req, res) => {
     order.paymentStatus = 'Failed'
     await order.save()
   }
-  console.log('inside the post of the success',req.body.transactionId)
+  // console.log('inside the post of the success',req.body.transactionId)
   res.sendFile(path.join(__dirname, '../restaurant-website/pages/success.html'));
 });
 
