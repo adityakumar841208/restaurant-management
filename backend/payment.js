@@ -98,10 +98,28 @@ router.post('/create-payment', async (req, res) => {
 
 // Payment Callback Endpoint
 router.post('/payment-callback', async (req, res) => {
-  // Log the request body to understand the incoming structure
   console.log("Received Callback:", req.body);
 
-  const { transactionId, paymentState } = req.body.data; // Access the nested 'data' object
+  // Decode and parse the response
+  const { response } = req.body;
+  let parsedResponse;
+  try {
+    const decodedResponse = Buffer.from(response, 'base64').toString('utf-8');
+    parsedResponse = JSON.parse(decodedResponse);
+  } catch (error) {
+    console.error("Error decoding or parsing response:", error.message);
+    return res.status(400).json({ status: "error", message: "Invalid response format." });
+  }
+
+  console.log("Parsed Response:", parsedResponse);
+
+  // Extract required fields
+  const { data } = parsedResponse;
+  if (!data) {
+    return res.status(400).json({ status: "error", message: "Missing data field in response." });
+  }
+
+  const { transactionId, paymentState } = data;
 
   if (!transactionId) {
     return res.status(400).json({ status: "error", message: "transactionId is missing in the callback." });
@@ -129,7 +147,7 @@ router.post('/payment-callback', async (req, res) => {
 
     // Send notification to the owner about the updated payment status
     const message = `Order #${order.orderId} payment status: ${order.paymentStatus}`;
-    sendNotificationToOwner(message);
+    sendNotification(order.orderId);
 
     res.json({ status: "success", message: "Payment status updated successfully." });
   } catch (error) {
@@ -137,6 +155,7 @@ router.post('/payment-callback', async (req, res) => {
     res.status(500).json({ status: "error", message: "Failed to process callback.", error: error.message });
   }
 });
+
 
 
 // Manual Payment Verification Endpoint (Triggered by success.html)
