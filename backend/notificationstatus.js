@@ -9,7 +9,7 @@ router.get('/admin/:id', async (req, res) => {
         if (!result) {
             return res.status(404).send('<h1 style="color: red; text-align: center;">Order not found</h1>');
         }
-        console.log('notification ' ,result)
+        // console.log('notification ' ,result)
 
         // Construct HTML response with inline CSS
         const html = `

@@ -26,7 +26,7 @@ const sendNotification = async function sendNotification(orderId) {
     // Find all subscriptions from the DB
     const subscriptions = await Subscription.find();
     const order = RealOrder.findOne({orderId})
-    console.log(order)
+    console.log('notification order is here: ',order)
 
     // Notification content
     const notificationPayload = JSON.stringify({
