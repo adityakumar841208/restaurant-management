@@ -115,8 +115,10 @@
 
         <!-- Error message (initially hidden) -->
         <div id="errorMessage" class="status-message error-message" style="display: none;">
-            There was an issue with your payment. Please try again.
+            There was an issue with your payment. Please try again. If the issue persists and you have already made the
+            payment, contact us at <strong>9664982306</strong>.
         </div>
+
 
         <!-- Order Details (initially hidden) -->
         <div id="orderDetails" class="order-details" style="display: none;">
@@ -165,50 +167,50 @@
             },
             body: JSON.stringify({ orderId })
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success' && data.orderDetails) {
-                const order = data.orderDetails;
-                const orderSummary = document.getElementById('orderSummary');
-                let summaryHtml = '';
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success' && data.orderDetails) {
+                    const order = data.orderDetails;
+                    const orderSummary = document.getElementById('orderSummary');
+                    let summaryHtml = '';
 
-                // Iterate over the order items and generate the HTML
-                order.orderSummary.forEach(item => {
-                    summaryHtml += `<li>${item.name} - ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}</li>`;
-                });
+                    // Iterate over the order items and generate the HTML
+                    order.orderSummary.forEach(item => {
+                        summaryHtml += `<li>${item.name} - ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}</li>`;
+                    });
 
-                // Display the total amount
-                document.getElementById('totalAmount').innerText = order.amount;
+                    // Display the total amount
+                    document.getElementById('totalAmount').innerText = order.amount;
 
-                // Display Order ID, Mobile, Timestamp
-                document.getElementById('orderId').innerText = order.orderId;
-                document.getElementById('mobile').innerText = order.mobile;
-                document.getElementById('address').innerText = order.address;
-                document.getElementById('timestamp').innerText = new Date(order.timestamp).toLocaleString();
+                    // Display Order ID, Mobile, Timestamp
+                    document.getElementById('orderId').innerText = order.orderId;
+                    document.getElementById('mobile').innerText = order.mobile;
+                    document.getElementById('address').innerText = order.address;
+                    document.getElementById('timestamp').innerText = new Date(order.timestamp).toLocaleString();
 
-                // Add order details to the list
-                orderSummary.innerHTML = summaryHtml;
+                    // Add order details to the list
+                    orderSummary.innerHTML = summaryHtml;
 
-                // Show order details section
-                document.getElementById('orderDetails').style.display = 'block';
+                    // Show order details section
+                    document.getElementById('orderDetails').style.display = 'block';
 
-                // Show success message
-                document.getElementById('paymentStatusMessage').style.display = 'block';
+                    // Show success message
+                    document.getElementById('paymentStatusMessage').style.display = 'block';
 
-                // Show the Download Receipt button
-                document.getElementById('downloadReceipt').style.display = 'block';
+                    // Show the Download Receipt button
+                    document.getElementById('downloadReceipt').style.display = 'block';
 
-                // Remove the local storage cart
-                localStorage.removeItem('cart');
-            } else {
-                // Show error message if payment verification fails
-                document.getElementById('errorMessage').style.display = 'block';
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching order details:', error);
-            document.getElementById('errorMessage').style.display = 'block'; // Show error if fetching fails
-        });
+                    // Remove the local storage cart
+                    localStorage.removeItem('cart');
+                } else {
+                    // Show error message if payment verification fails
+                    document.getElementById('errorMessage').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching order details:', error);
+                document.getElementById('errorMessage').style.display = 'block'; // Show error if fetching fails
+            });
 
         // Function to generate the receipt as a .txt file
         document.getElementById('downloadReceipt').addEventListener('click', function () {

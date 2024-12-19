@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const {Order} = require('./model')
+const {RealOrder} = require('./model')
 
 router.get('/admin/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const result = await Order.findOne({ _id: id });
+        const result = await RealOrder.findOne({ orderId:id});
         if (!result) {
             return res.status(404).send('<h1 style="color: red; text-align: center;">Order not found</h1>');
         }
@@ -61,12 +61,10 @@ router.get('/admin/:id', async (req, res) => {
             <div class="container">
                 <h1>Order Details</h1>
                 <p><strong>Order ID:</strong> <span class="highlight">${result._id}</span></p>
-                <p><strong>Transaction ID:</strong> ${result.transactionId}</p>
-                <p><strong>Name:</strong> ${result.name}</p>
+                <p><strong>Transaction ID:</strong> ${result.orderId}</p>
                 <p><strong>Address:</strong> ${result.address}</p>
-                <p><strong>Landmark:</strong> ${result.landmark}</p>
                 <p><strong>Mobile:</strong> ${result.mobile}</p>
-                <p><strong>Total Amount:</strong> ₹${result.totalAmount}</p>
+                <p><strong>Total Amount:</strong> ₹${result.amount}</p>
                 <p><strong>Timestamp:</strong> ${new Date(result.timestamp).toLocaleString()}</p>
                 <div class="items">
                     <h2>Items:</h2>
