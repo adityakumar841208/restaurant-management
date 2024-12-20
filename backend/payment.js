@@ -48,7 +48,7 @@ router.post('/create-payment', async (req, res) => {
     activePaymentSessions.delete(existingSession.orderId);
   }
 
-  const orderId = uuidv4();
+  const orderId = `VR${Date.now()}`; 
 
   // Create new payment session
   activePaymentSessions.set(orderId, {
