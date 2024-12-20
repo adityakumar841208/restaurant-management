@@ -70,6 +70,11 @@ const realOrderSchema = new mongoose.Schema({
     orderSummary: { type: Array, required: true }, // Array to hold items
     paymentStatus: { type: String, default: 'Pending' },
     timestamp: { type: Date, default: Date.now },
+    retryCount: { 
+        type: Number, 
+        default: 0, 
+        min: [0, 'Retry count cannot be negative'] 
+      }
 });
 
 const RealOrder = mongoose.model('RealOrder',realOrderSchema);

@@ -3,7 +3,6 @@ const path = require('path');
 const crypto = require('crypto');
 const axios = require('axios');
 require('dotenv').config();
-const { v4: uuidv4 } = require('uuid');
 const { RealOrder } = require('./model.js');
 const sendNotification = require('./sendNotification');
 const router = express.Router();
@@ -48,7 +47,7 @@ router.post('/create-payment', async (req, res) => {
     activePaymentSessions.delete(existingSession.orderId);
   }
 
-  const orderId = `VR${Date.now()}`; 
+  const orderId = `VR${Date.now()}${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
   // Create new payment session
   activePaymentSessions.set(orderId, {
