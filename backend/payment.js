@@ -5,72 +5,95 @@ const axios = require('axios');
 require('dotenv').config();
 const { v4: uuidv4 } = require('uuid');
 const { RealOrder } = require('./model.js');
-// const { sendNotification } = require('web-push');.
 const sendNotification = require('./sendNotification');
 const router = express.Router();
 
-// Middleware 
 router.use(express.json());
 
-const WEB_BASE_URL = process.env.WEB_BASE_URL || 'https://vedika-restaurant.onrender.com';
+// Add a new middleware to clear PhonePe cookies
+const clearPhonePeCookies = (res) => {
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    path: '/'
+  };
 
-// PhonePe Configuration
-const PHONEPE_BASE_URL = process.env.BASE_URL;
-const MERCHANT_ID = process.env.MERCHANT_ID;
-const SALT_KEY = process.env.KEY;
-const SALT_INDEX = process.env.SALT_INDEX;
+  res.clearCookie('mercury-t2.phonepe.com', { ...cookieOptions, domain: '.phonepe.com' });
+  res.clearCookie('phonepe.com', { ...cookieOptions, domain: 'phonepe.com' });
+};
 
-if (!PHONEPE_BASE_URL || !MERCHANT_ID || !SALT_KEY || !SALT_INDEX) {
-  console.error("Missing required environment variables. Please check your .env file.");
-  process.exit(1); // Exit the application
-}
-
-// Helper Function to Generate SHA256 Hash
-function generateSHA256Hash(data) {
+// Utility function to generate SHA256 hash
+const generateSHA256Hash = (data) => {
   return crypto.createHash('sha256').update(data).digest('hex');
-}
+};
+
+// Add payment session tracking
+const activePaymentSessions = new Map();
 
 // Create Payment Endpoint
 router.post('/create-payment', async (req, res) => {
   const { mobile, orderSummary, amount, address } = req.body;
-  const orderId = uuidv4(); // Unique order ID
+  
+  // Check if there's an active payment session for this mobile number
+  const existingSession = Array.from(activePaymentSessions.values())
+    .find(session => session.mobile === mobile && 
+          (Date.now() - session.timestamp) < 300000); // 5 minutes timeout
 
-  if (!mobile || !amount || !orderSummary || !address) {
-    return res.status(400).json({ status: "error", message: "Missing required fields: mobile or amount." });
+  if (existingSession) {
+    // Cancel the existing session
+    await RealOrder.findOneAndUpdate(
+      { orderId: existingSession.orderId },
+      { paymentStatus: 'Cancelled' }
+    );
+    activePaymentSessions.delete(existingSession.orderId);
   }
 
-  // Save the data to the database
+  const orderId = uuidv4();
+
+  // Create new payment session
+  activePaymentSessions.set(orderId, {
+    mobile,
+    timestamp: Date.now(),
+    orderId
+  });
+
+  // Cleanup old sessions
+  setTimeout(() => {
+    activePaymentSessions.delete(orderId);
+  }, 300000); // 5 minutes timeout
+
   const order = new RealOrder({
     orderId,
     mobile,
     address,
     amount,
     orderSummary,
-    paymentStatus: 'Pending', // Default status
+    paymentStatus: 'Pending',
     timestamp: new Date(),
+    retryCount: 0
   });
 
   await order.save();
 
   try {
     const payload = {
-      merchantId: MERCHANT_ID,
+      merchantId: process.env.MERCHANT_ID,
       merchantTransactionId: orderId,
-      merchantUserId: "user123", // Optional
-      amount: amount * 100, // Amount in paise (1 INR = 100 paise)
-      redirectUrl: `${WEB_BASE_URL}/pages/success.html?orderId=${orderId}`, // Redirect after payment
+      merchantUserId: mobile, // Use mobile number as user ID for better tracking
+      amount: amount * 100,
+      redirectUrl: `${process.env.WEB_BASE_URL}/pages/success.html?orderId=${orderId}`,
       redirectMode: "POST",
-      callbackUrl: `${WEB_BASE_URL}/payment-callback`, // Callback for status
+      callbackUrl: `${process.env.WEB_BASE_URL}/payment-callback`,
       paymentInstrument: { type: "PAY_PAGE" },
     };
 
     const encodedPayload = Buffer.from(JSON.stringify(payload)).toString('base64');
-    const hashData = `${encodedPayload}/pg/v1/pay${SALT_KEY}`;
+    const hashData = `${encodedPayload}/pg/v1/pay${process.env.KEY}`;
     const hash = generateSHA256Hash(hashData);
-    const checksum = `${hash}###${SALT_INDEX}`;
+    const checksum = `${hash}###${process.env.SALT_INDEX}`;
 
     const response = await axios.post(
-      `${PHONEPE_BASE_URL}/pg/v1/pay`,
+      `${process.env.BASE_URL}/pg/v1/pay`,
       { request: encodedPayload },
       {
         headers: {
@@ -79,7 +102,7 @@ router.post('/create-payment', async (req, res) => {
         },
       }
     );
-    console.log(response)
+
     if (response.data.success) {
       res.json({
         status: "success",
@@ -87,127 +110,100 @@ router.post('/create-payment', async (req, res) => {
         orderId,
       });
     } else {
-      res.status(400).json({ status: "error", message: response.data.message });
+      throw new Error(response.data.message);
     }
   } catch (error) {
     console.error("Error creating payment:", error.response?.data || error.message);
-    res.status(500).json({ status: "error", message: "Failed to create payment.", error: error.message });
+    activePaymentSessions.delete(orderId);
+    await RealOrder.findOneAndUpdate(
+      { orderId },
+      { paymentStatus: 'Failed' }
+    );
+    res.status(500).json({ 
+      status: "error", 
+      message: "Failed to create payment.", 
+      error: error.message 
+    });
   }
 });
 
-
-// Payment Callback Endpoint
 router.post('/payment-callback', async (req, res) => {
-
-  // Decode and parse the response
   const { response } = req.body;
   let parsedResponse;
+  
   try {
     const decodedResponse = Buffer.from(response, 'base64').toString('utf-8');
     parsedResponse = JSON.parse(decodedResponse);
+    
+    const { data } = parsedResponse;
+    if (!data || !data.transactionId) {
+      throw new Error('Invalid response data');
+    }
 
-
-  } catch (error) {
-    console.error("Error decoding or parsing response:", error.message);
-    return res.status(400).json({ status: "error", message: "Invalid response format." });
-  }
-
-  console.log("Parsed Response:", parsedResponse);
-
-  // Extract required fields
-  const { data } = parsedResponse;
-  if (!data) {
-    return res.status(400).json({ status: "error", message: "Missing data field in response." });
-  }
-
-  const { transactionId, paymentState } = data;
-
-  if (!transactionId) {
-    return res.status(400).json({ status: "error", message: "transactionId is missing in the callback." });
-  }
-
-  try {
-    // Find the order using the transactionId
+    const { transactionId, paymentState } = data;
     const order = await RealOrder.findOne({ orderId: transactionId });
 
     if (!order) {
-      return res.status(404).json({ status: "error", message: "Order not found." });
+      throw new Error('Order not found');
     }
 
-    // Update the payment status based on the paymentState
-    if (paymentState === 'COMPLETED') {
-      order.paymentStatus = 'Completed';
-    } else if (paymentState === 'FAILED') {
-      order.paymentStatus = 'Failed';
-    } else {
-      order.paymentStatus = 'Pending';
+    // Update payment status
+    order.paymentStatus = {
+      'COMPLETED': 'Completed',
+      'FAILED': 'Failed',
+      'CANCELLED': 'Cancelled'
+    }[paymentState] || 'Pending';
+
+    // Clear session if payment is complete or cancelled
+    if (['Completed', 'Failed', 'Cancelled'].includes(order.paymentStatus)) {
+      activePaymentSessions.delete(transactionId);
+      clearPhonePeCookies(res);
     }
 
-    // Save the updated order status
+    await order.save();
+    await sendNotification(order.orderId);
+
+    res.json({ 
+      status: "success", 
+      message: "Payment status updated successfully.",
+      paymentStatus: order.paymentStatus
+    });
+  } catch (error) {
+    console.error("Error in payment callback:", error);
+    res.status(500).json({ 
+      status: "error", 
+      message: "Failed to process callback.", 
+      error: error.message 
+    });
+  }
+});
+
+// Modified success endpoint
+router.post('/pages/success.html', async (req, res) => {
+  const { code, transactionId } = req.body;
+  
+  try {
+    const order = await RealOrder.findOne({ orderId: transactionId });
+    if (!order) {
+      throw new Error('Order not found');
+    }
+
+    order.paymentStatus = code === 'PAYMENT_SUCCESS' ? 'Completed' : 'Failed';
     await order.save();
 
-    // Send notification to the owner about the updated payment status
-    const message = `Order #${order.orderId} payment status: ${order.paymentStatus}`;
-    sendNotification(order.orderId);
-
-    res.json({ status: "success", message: "Payment status updated successfully." });
-  } catch (error) {
-    console.error("Error in payment callback:", error.message);
-    res.status(500).json({ status: "error", message: "Failed to process callback.", error: error.message });
-  }
-});
-
-
-
-// Manual Payment Verification Endpoint (Triggered by success.html)
-router.post('/verify-payment', async (req, res) => {
-  const { orderId } = req.body; // The orderId sent from success.html
-  // console.log('Received orderId for verification:', orderId);
-
-  if (!orderId) {
-    return res.status(400).json({ status: "error", message: "Missing required field: orderId." });
-  }
-
-  try {
-    // Step 1: Find the order by orderId
-    const order = await RealOrder.findOne({ orderId });
-
-    if (!order) {
-      return res.status(404).json({ status: "error", message: "Order not found." });
+    if (code === 'PAYMENT_SUCCESS') {
+      await sendNotification(transactionId);
     }
 
-    // Step 2: Check payment status
-    if (order.paymentStatus === 'Completed') {
-      // Payment was successful, send the order details
-      res.json({ status: "success", orderDetails: order });
-    } else {
-      // Payment failed
-      res.json({ status: "failure", message: "Payment failed. Please try again." });
-    }
+    // Clear PhonePe session
+    clearPhonePeCookies(res);
+    activePaymentSessions.delete(transactionId);
+
+    res.sendFile(path.join(__dirname, '../restaurant-website/pages/success.html'));
   } catch (error) {
-    console.error("Error verifying payment:", error.message);
-    res.status(500).json({ status: "error", message: "Failed to verify payment.", error: error.message });
+    console.error('Error processing success page:', error);
+    res.status(500).send('Error processing payment status');
   }
-});
-
-// Serve success.html
-router.post('/pages/success.html',async (req, res) => {
-  const status = req.body.code
-  const transactionId = req.body.transactionId
-  // console.log(transactionId)
-  const order = await RealOrder.findOne({orderId: transactionId})
-  // console.log(order)
-  if(status === 'PAYMENT_SUCCESS'){
-    order.paymentStatus = 'Completed'
-    await order.save()
-
-    await sendNotification(transactionId)
-  }else{
-    order.paymentStatus = 'Failed'
-    await order.save()
-  }
-  // console.log('inside the post of the success',req.body.transactionId)
-  res.sendFile(path.join(__dirname, '../restaurant-website/pages/success.html'));
 });
 
 module.exports = router;
