@@ -153,10 +153,10 @@ router.post('/payment-callback', async (req, res) => {
       'CANCELLED': 'Cancelled'
     }[paymentState] || 'Pending';
 
-    // Clear session if payment is complete or cancelled
+    // Clear session and cookies if payment is complete or cancelled
     if (['Completed', 'Failed', 'Cancelled'].includes(order.paymentStatus)) {
       activePaymentSessions.delete(transactionId);
-      clearPhonePeCookies(res);
+      clearAllCookies(res);  // Clear all cookies
     }
 
     await order.save();
@@ -176,6 +176,28 @@ router.post('/payment-callback', async (req, res) => {
     });
   }
 });
+
+// Function to clear all cookies
+const clearAllCookies = (res) => {
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',  // Ensure cookies are cleared based on the environment
+    path: '/'
+  };
+
+  // List of common cookies to clear
+  res.clearCookie('session_id', cookieOptions);  // Example of clearing a session cookie
+  res.clearCookie('user_session', cookieOptions);  // Another session cookie
+  res.clearCookie('payment_gateway_session', cookieOptions);  // Payment gateway session cookie
+  
+  // If you are using specific domains, clear those as well
+  res.clearCookie('mercury-t2.phonepe.com', { ...cookieOptions, domain: '.phonepe.com' });
+  res.clearCookie('phonepe.com', { ...cookieOptions, domain: 'phonepe.com' });
+
+  // Additional cookies can be added based on your app's specific needs
+  res.clearCookie('user_auth_token', cookieOptions);
+  res.clearCookie('user_preferences', cookieOptions);
+};
 
 // Modified success endpoint
 router.post('/pages/success.html', async (req, res) => {

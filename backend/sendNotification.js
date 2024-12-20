@@ -57,8 +57,9 @@ const sendNotification = async function sendNotification(orderId) {
         from: process.env.EMAIL_USER,
         to: process.env.OWNER_EMAIL,
         subject: `New Order Received`,
-        text: `You have received a new order:\n\n${(order, null, 2)}`,
+        text: `You have received a new order:\n\n${JSON.stringify(order, null, 2)}`,
     };
+
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
