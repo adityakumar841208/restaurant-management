@@ -157,7 +157,7 @@
         // Get the orderId and status from the URL query parameters
         const urlParams = new URLSearchParams(window.location.search);
         const orderId = urlParams.get('orderId');  // Get the orderId from the URL
-
+        // console.log(orderId)
         // Verify payment status and fetch order details
         fetch('/verify-payment', {
             method: 'POST',
@@ -168,8 +168,9 @@
         })
             .then(response => response.json())
             .then(data => {
+                // console.log(data.orderDetails[0])
                 if (data.status === 'success' && data.orderDetails) {
-                    const order = data.orderDetails;
+                    const order = data.orderDetails[0];
                     const orderSummary = document.getElementById('orderSummary');
                     let summaryHtml = '';
 

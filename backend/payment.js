@@ -32,11 +32,11 @@ const activePaymentSessions = new Map();
 // Create Payment Endpoint
 router.post('/create-payment', async (req, res) => {
   const { mobile, orderSummary, amount, address } = req.body;
-  
+
   // Check if there's an active payment session for this mobile number
   const existingSession = Array.from(activePaymentSessions.values())
-    .find(session => session.mobile === mobile && 
-          (Date.now() - session.timestamp) < 300000); // 5 minutes timeout
+    .find(session => session.mobile === mobile &&
+      (Date.now() - session.timestamp) < 300000); // 5 minutes timeout
 
   if (existingSession) {
     // Cancel the existing session
@@ -78,7 +78,8 @@ router.post('/create-payment', async (req, res) => {
     const payload = {
       merchantId: process.env.MERCHANT_ID,
       merchantTransactionId: orderId,
-      merchantUserId: mobile, // Use mobile number as user ID for better tracking
+      merchantUserId: mobile, // Use mobile number as user ID for better tr
+      // acking
       amount: amount * 100,
       redirectUrl: `${process.env.WEB_BASE_URL}/pages/success.html?orderId=${orderId}`,
       redirectMode: "POST",
@@ -118,10 +119,10 @@ router.post('/create-payment', async (req, res) => {
       { orderId },
       { paymentStatus: 'Failed' }
     );
-    res.status(500).json({ 
-      status: "error", 
-      message: "Failed to create payment.", 
-      error: error.message 
+    res.status(500).json({
+      status: "error",
+      message: "Failed to create payment.",
+      error: error.message
     });
   }
 });
@@ -129,11 +130,11 @@ router.post('/create-payment', async (req, res) => {
 router.post('/payment-callback', async (req, res) => {
   const { response } = req.body;
   let parsedResponse;
-  
+
   try {
     const decodedResponse = Buffer.from(response, 'base64').toString('utf-8');
     parsedResponse = JSON.parse(decodedResponse);
-    
+
     const { data } = parsedResponse;
     if (!data || !data.transactionId) {
       throw new Error('Invalid response data');
@@ -162,17 +163,17 @@ router.post('/payment-callback', async (req, res) => {
     await order.save();
     await sendNotification(order.orderId);
 
-    res.json({ 
-      status: "success", 
+    res.json({
+      status: "success",
       message: "Payment status updated successfully.",
       paymentStatus: order.paymentStatus
     });
   } catch (error) {
     console.error("Error in payment callback:", error);
-    res.status(500).json({ 
-      status: "error", 
-      message: "Failed to process callback.", 
-      error: error.message 
+    res.status(500).json({
+      status: "error",
+      message: "Failed to process callback.",
+      error: error.message
     });
   }
 });
@@ -189,7 +190,7 @@ const clearAllCookies = (res) => {
   res.clearCookie('session_id', cookieOptions);  // Example of clearing a session cookie
   res.clearCookie('user_session', cookieOptions);  // Another session cookie
   res.clearCookie('payment_gateway_session', cookieOptions);  // Payment gateway session cookie
-  
+
   // If you are using specific domains, clear those as well
   res.clearCookie('mercury-t2.phonepe.com', { ...cookieOptions, domain: '.phonepe.com' });
   res.clearCookie('phonepe.com', { ...cookieOptions, domain: 'phonepe.com' });
@@ -202,7 +203,7 @@ const clearAllCookies = (res) => {
 // Modified success endpoint
 router.post('/pages/success.html', async (req, res) => {
   const { code, transactionId } = req.body;
-  
+
   try {
     const order = await RealOrder.findOne({ orderId: transactionId });
     if (!order) {
@@ -225,6 +226,23 @@ router.post('/pages/success.html', async (req, res) => {
     console.error('Error processing success page:', error);
     res.status(500).send('Error processing payment status');
   }
+});
+
+router.post('/verify-payment', async (req, res) => {
+  const { orderId } = req.body
+  
+  try {
+    const order = await RealOrder.find({orderId});
+    if (!order) {
+      throw new Error('Order not found');
+    }
+    
+    res.send({ status: 'success', orderDetails: order })
+
+  } catch (err) {
+    res.send({ 'data': 'wrong-credentials' })
+  }
+
 });
 
 module.exports = router;
