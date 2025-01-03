@@ -44,7 +44,7 @@ router.get('/admin/:id', async (req, res) => {
                 <p><strong>Address:</strong> ${result.address}</p>
                 <p><strong>Mobile:</strong> ${result.mobile}</p>
                 <p><strong>Total Amount:</strong> ₹${result.amount}</p>
-                <p><strong>Timestamp:</strong> ${new Date(result.timestamp).toLocaleString()}</p>
+                <p><strong>Timestamp:</strong> ${new Date(result.timestamp).toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })}</p>
                 <p><strong>Payment Status:</strong> ${result.paymentStatus}</p>
                 <div class="order-summary">
                     <h2>Order Summary:</h2>
