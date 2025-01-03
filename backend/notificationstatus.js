@@ -6,12 +6,12 @@ router.get('/admin/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        console.log("Requested Order ID:", id);
+        // console.log("Requested Order ID:", id);
 
         // Step 1: Fetch the order details
         const result = await RealOrder.findOne({ orderId: id });
 
-        console.log("Order Details:", result);
+        // console.log("Order Details:", result);
 
         if (!result) {
             return res.status(404).send('<h1 style="color: red; text-align: center;">Order not found</h1>');
