@@ -115,7 +115,8 @@
 
         <!-- Error message (initially hidden) -->
         <div id="errorMessage" class="status-message error-message" style="display: none;">
-            There was an issue with your payment. Please try again. If the issue persists, contact us at <strong>9664982306</strong>.
+            There was an issue with your payment. Please try again. If the issue persists, contact us at
+            <strong>9664982306</strong>.
         </div>
 
 
@@ -130,6 +131,7 @@
                 <strong>Order ID:</strong> <span id="orderId"></span><br>
                 <strong>Mobile:</strong> <span id="mobile"></span><br>
                 <strong>Address:</strong> <span id="address"></span><br>
+                <strong>Payment:</strong> <span id="status"></span><br>
                 <strong>Timestamp:</strong> <span id="timestamp"></span>
             </div>
             <button id="downloadReceipt" class="download-btn" style="display: none;">Download Receipt</button>
@@ -186,6 +188,7 @@
                     document.getElementById('orderId').innerText = order.orderId;
                     document.getElementById('mobile').innerText = order.mobile;
                     document.getElementById('address').innerText = order.address;
+                    document.getElementById('status').innerText = order.paymentStatus;
                     document.getElementById('timestamp').innerText = new Date(order.timestamp).toLocaleString();
 
                     // Add order details to the list
@@ -195,7 +198,13 @@
                     document.getElementById('orderDetails').style.display = 'block';
 
                     // Show success message
-                    document.getElementById('paymentStatusMessage').style.display = 'block';
+                    if (order.paymentStatus == 'Completed') {
+                        document.getElementById('paymentStatusMessage').style.display = 'block';
+                        document.getElementById('status').style.color = 'green';
+                    } else {
+                        document.getElementById('errorMessage').style.display = 'block';
+                        document.getElementById('status').style.color = 'red';
+                    }
 
                     // Show the Download Receipt button
                     document.getElementById('downloadReceipt').style.display = 'block';
