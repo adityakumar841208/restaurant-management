@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/navbar.css">
     <link rel="stylesheet" href="assets/css/footer.css">
-    <link rel="stylesheet" href="assets/css/carousel.css"> <!-- Link to the new carousel CSS file -->
 
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -24,7 +23,27 @@
 
 <body>
     <!-- Navbar of the page -->
-    <div id="navbar"></div>
+    <div id="navbar">
+        <header>
+            <nav class="nav1">
+              <div class="logo">
+                <span><a href="/" style="color: #ff8c00; text-decoration: none;">Vedika Restaurant</a></span>
+              </div>
+              <ul class="nav-links" id="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/pages/menu.html">Menu</a></li>
+                <li><a href="/pages/cart.html">Cart</a></li>
+                <li><a href="/pages/about.html">About</a></li>
+                <li><a href="/pages/contact.html">Contact Us</a></li>
+              </ul>
+              <div class="menu-icon" id="menu-icon" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </nav>
+        </header>
+    </div>
 
     <!-- Hero Section -->
     <div id="carouselExampleSlidesOnly" class="carousel slide carousel-container" data-ride="carousel" data-interval="4000">
@@ -160,10 +179,42 @@
     </section>
 
     <!-- Footer section of the page -->
-    <div id="footer"></div>
+    <div id="footer">
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../pages/about.html">About Us</a></li>
+                        <li><a href="../pages/contact.html">Contact</a></li>
+                        <li><a href="../pages/menu.html">Menu</a></li>
+                        <li><a href="../pages/policy.html">Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p>Email: varadinternationalhotel@gmail.com</p>
+                    <p>Phone: 9664982306</p>
+                    <p>Address: Vedika Dhaba ,Shukla Bazaar Bypass ,Ambedkar Nagar (UP) </p>
+                </div>
+                
+                <div class="footer-socials">
+                    <div class="footer-timings">
+                        <h4>Our Timings</h4>
+                        <p>Open Every Day: 9:00 AM - 7:00 PM</p>
+                    </div>                
+                </div>
+            </div>
+            <hr style="border:1px solid rgb(5, 5, 10); margin:20px 0px;">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Vedika Restaurant. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </div>
 
     <!-- Load Navbar and Footer Components -->
-    <script>
+    <!-- <script>
         // Load navbar
         fetch('./components/navbar.html')
             .then(response => response.text())
@@ -179,6 +230,13 @@
         fetch('./components/footer.html')
             .then(response => response.text())
             .then(data => document.getElementById('footer').innerHTML = data);
+    </script> -->
+    <script>
+        // Toggle navbar for mobile view
+        document.getElementById("menu-icon").onclick = ()=>{
+        const navLinks = document.getElementById("nav-links");
+        navLinks.classList.toggle("active");
+        };
     </script>
 
     <!-- Bootstrap JS -->
